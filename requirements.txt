@@ -2,5 +2,8 @@ streamlit
 tensorflow
 ultralytics
 pillow
-ultralytics==8.1.0
-opencv-python-headless==4.9.0.80
+ultralytics
+opencv-python-headless
+numpy
+pandas
+torch
