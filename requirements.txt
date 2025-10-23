@@ -1,13 +1,7 @@
+python_version == "3.11"
 streamlit
+ultralytics
 tensorflow
-ultralytics
-pillow
-opencv-python
-ultralytics
-opencv-python-headless
-streamlit
-tensorflow
-ultralytics
-opencv-python-headless
+opencv-python-headless==4.10.0.84
 Pillow
 numpy
