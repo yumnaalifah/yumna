@@ -2,9 +2,6 @@ streamlit
 tensorflow
 ultralytics
 pillow
+opencv-python
 ultralytics
 opencv-python-headless
-numpy
-pandas
-torch
-torchvision
