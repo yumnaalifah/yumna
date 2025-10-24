@@ -11,42 +11,40 @@ import cv2
 # ==========================
 @st.cache_resource
 def load_models():
-    yolo_model = YOLO("model/Yumnaa Alifah_Laporan 4.pt")  # Model deteksi objek
-    classifier = tf.keras.models.load_model("modelclassifier_model.h5")  # Model klasifikasi
+    yolo_model = YOLO("Yumnaa Alifah_Laporan 4.pt")  # Model deteksi objek
+    classifier = tf.keras.models.load_model("classifier_model.h5")  # Model klasifikasi
     return yolo_model, classifier
-
-
-# ==========================
-# Main App
-# ==========================
-st.title("🚀 Aplikasi Deteksi & Klasifikasi Citra")
 
 yolo_model, classifier = load_models()
 
-uploaded_file = st.file_uploader("Unggah gambar untuk deteksi dan klasifikasi", type=["jpg", "png", "jpeg"])
+# ==========================
+# UI
+# ==========================
+st.title("🧠 Image Classification & Object Detection App")
+
+menu = st.sidebar.selectbox("Pilih Mode:", ["Deteksi Objek (YOLO)", "Klasifikasi Gambar"])
+
+uploaded_file = st.file_uploader("Unggah Gambar", type=["jpg", "jpeg", "png"])
 
 if uploaded_file is not None:
     img = Image.open(uploaded_file)
-    st.image(img, caption="Gambar diunggah", use_container_width=True)
+    st.image(img, caption="Gambar yang Diupload", use_container_width=True)
 
-    # Simpan gambar sementara
-    img_path = "temp.jpg"
-    img.save(img_path)
+    if menu == "Deteksi Objek (YOLO)":
+        # Deteksi objek
+        results = yolo_model(img)
+        result_img = results[0].plot()  # hasil deteksi (gambar dengan box)
+        st.image(result_img, caption="Hasil Deteksi", use_container_width=True)
 
-    # Deteksi objek dengan YOLO
-    results = yolo_model(img_path)
-    result_img = results[0].plot()  # Hasil deteksi berupa array gambar
+    elif menu == "Klasifikasi Gambar":
+        # Preprocessing
+        img_resized = img.resize((224, 224))  # sesuaikan ukuran dengan model kamu
+        img_array = image.img_to_array(img_resized)
+        img_array = np.expand_dims(img_array, axis=0)
+        img_array = img_array / 255.0
 
-    st.image(result_img, caption="Hasil Deteksi YOLO", use_container_width=True)
-
-    # ==========================
-    # Klasifikasi dengan model .h5
-    # ==========================
-    img_resized = img.resize((224, 224))  # ubah ukuran sesuai model klasifikasi
-    img_array = image.img_to_array(img_resized)
-    img_array = np.expand_dims(img_array, axis=0) / 255.0
-
-    prediction = classifier.predict(img_array)
-    predicted_class = np.argmax(prediction, axis=1)
-
-    st.success(f"✅ Kelas Prediksi: {predicted_class[0]}")
+        # Prediksi
+        prediction = classifier.predict(img_array)
+        class_index = np.argmax(prediction)
+        st.write("### Hasil Prediksi:", class_index)
+        st.write("Probabilitas:", np.max(prediction))
