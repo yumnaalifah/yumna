@@ -11,7 +11,7 @@ import os
 # ==========================
 @st.cache_resource(show_spinner="🔄 Memuat model YOLO dan classifier...")
 def load_models():
-    yolo_path = "model/Yumnaa_Alifah_Laporan_4.pt"
+    yolo_path = "model/Yumnaa Alifah_Laporan_4.pt"
     classifier_path = "model/classifier_model.h5"
 
     # Cek file model
